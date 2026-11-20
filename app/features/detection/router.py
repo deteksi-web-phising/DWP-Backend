@@ -7,14 +7,20 @@ from app.features.detection.schemas import (
 )
 from app.features.detection.service import DetectionService
 
-router = APIRouter(prefix="/detection", tags=["Detection & Inference"])
+router = APIRouter(tags=["Detection & Inference"])
 
 
 @router.post(
     "/extract-url",
     response_model=ExtractedFeaturesResponse,
     status_code=status.HTTP_200_OK,
-    summary="Extract 30 features from target URL",
+    summary="Extract 30 features from target URL (PRD 5.2)",
+)
+@router.post(
+    "/detection/extract-url",
+    response_model=ExtractedFeaturesResponse,
+    status_code=status.HTTP_200_OK,
+    include_in_schema=False,
 )
 def extract_url_features(payload: URLInputRequest) -> ExtractedFeaturesResponse:
     """Extract structural URL features to populate detection form."""
@@ -31,7 +37,13 @@ def extract_url_features(payload: URLInputRequest) -> ExtractedFeaturesResponse:
     "/predict",
     response_model=PredictionResponse,
     status_code=status.HTTP_200_OK,
-    summary="Predict phishing probability using ML model",
+    summary="Predict phishing probability using ML model (PRD 5.2)",
+)
+@router.post(
+    "/detection/predict",
+    response_model=PredictionResponse,
+    status_code=status.HTTP_200_OK,
+    include_in_schema=False,
 )
 def predict_phishing(payload: PredictionRequest) -> PredictionResponse:
     """Evaluate 30 feature parameters against ML classifier."""
